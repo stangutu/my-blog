@@ -21,12 +21,15 @@ import path from 'path';
 
 const app = express();
 
+const dbURL = "mongodb://master:password@docdb-2021-01-08-17-43-57.cluster-ci8sd6weytrv.us-east-1.docdb.amazonaws.com:27017/?ssl=true&ssl_ca_certs=rds-combined-ca-bundle.pem&replicaSet=rs0&readPreference=secondaryPreferred&retryWrites=false";
+//const dbURL = "mongodb://localhost:27017";
+
 app.use(express.static(path.join(__dirname, '/build')));
 app.use(bodyParser.json());
 
 const withDB = async (operations, res) => {
     try {
-        const client = await MongoClient.connect('mongodb://localhost:27017', { useNewUrlParser: true });
+        const client = await MongoClient.connect(dbURL, { useNewUrlParser: true });
         const db = client.db('my-blog');
     
         await operations(db);
